@@ -2,6 +2,7 @@ package com.serdarfirlayis.case_study.service;
 
 import com.serdarfirlayis.case_study.entity.Location;
 import com.serdarfirlayis.case_study.exception.LocationNotFoundException;
+import com.serdarfirlayis.case_study.model.LocationDto;
 import com.serdarfirlayis.case_study.model.request.LocationRequest;
 import com.serdarfirlayis.case_study.model.response.LocationResponse;
 import com.serdarfirlayis.case_study.repository.LocationRepository;
@@ -16,7 +17,7 @@ public class LocationService {
 
     private final LocationRepository locationRepository;
 
-    public LocationResponse createLocation(LocationRequest request) {
+    public LocationDto createLocation(LocationRequest request) {
         Location location = Location.builder()
                 .name(request.getName())
                 .country(request.getCountry())
@@ -25,19 +26,22 @@ public class LocationService {
                 .build();
 
         Location savedLocation = locationRepository.save(location);
-        return mapToResponse(savedLocation);
+        return mapToDto(savedLocation);
     }
 
-    public List<LocationResponse> getAllLocations() {
-        return locationRepository.findAll().stream()
-                .map(this::mapToResponse)
+    public LocationResponse getAllLocations() {
+        List<LocationDto> locations = locationRepository.findAll().stream()
+                .map(this::mapToDto)
                 .toList();
+        return LocationResponse.builder()
+                .locations(locations)
+                .build();
     }
 
-    public LocationResponse getLocationById(Long id) {
+    public LocationDto getLocationById(Long id) {
         Location location = locationRepository.findById(id)
                 .orElseThrow(() -> new LocationNotFoundException("Location not found"));
-        return mapToResponse(location);
+        return mapToDto(location);
     }
 
     public Location getLocationEntityById(Long id) {
@@ -45,7 +49,7 @@ public class LocationService {
                 .orElseThrow(() -> new LocationNotFoundException("Location not found"));
     }
 
-    public LocationResponse updateLocation(Long id, LocationRequest request) {
+    public LocationDto updateLocation(Long id, LocationRequest request) {
         Location location = locationRepository.findById(id)
                 .orElseThrow(() -> new LocationNotFoundException("Location not found"));
 
@@ -55,15 +59,15 @@ public class LocationService {
         location.setLocationCode(request.getLocationCode());
 
         Location updatedLocation = locationRepository.save(location);
-        return mapToResponse(updatedLocation);
+        return mapToDto(updatedLocation);
     }
 
     public void deleteLocation(Long id) {
         locationRepository.deleteById(id);
     }
 
-    private LocationResponse mapToResponse(Location location) {
-        return LocationResponse.builder()
+    private LocationDto mapToDto(Location location) {
+        return LocationDto.builder()
                 .id(location.getId())
                 .name(location.getName())
                 .country(location.getCountry())
