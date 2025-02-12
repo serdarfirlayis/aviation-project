@@ -92,18 +92,18 @@ public class RouteService {
             List<TransportationType> transportTypes = new ArrayList<>();
             String viaAirport = "";
 
-            stations.add(transportations.getFirst().getOrigin().getName()); // İlk istasyonu ekle
+            stations.add(transportations.getFirst().getOrigin().getName());
 
             for (Transportation t : transportations) {
                 transportTypes.add(t.getType());
-                stations.add(t.getDestination().getName()); // Varış yerlerini sırasıyla ekle
+                stations.add(t.getDestination().getName());
 
                 if (t.getType() == TransportationType.FLIGHT) {
-                    viaAirport = t.getOrigin().getName(); // Uçuşun başladığı havaalanını al
+                    viaAirport = t.getOrigin().getName();
                 }
             }
 
-            String routeName = "Via " + viaAirport; // Uçuş yapılan havaalanını ekle
+            String routeName = "Via " + viaAirport;
 
             RouteDetail routeDetail = RouteDetail.builder()
                     .stations(stations)
