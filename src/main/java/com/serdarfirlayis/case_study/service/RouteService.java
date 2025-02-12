@@ -121,6 +121,6 @@ public class RouteService {
                         .routeName(entry.getKey())
                         .transportationGroups(entry.getValue())
                         .build())
-                .collect(Collectors.toList());
+                .toList();
     }
 }
