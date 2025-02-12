@@ -1,15 +1,13 @@
 package com.serdarfirlayis.case_study.service;
 
 import com.serdarfirlayis.case_study.entity.Transportation;
-import com.serdarfirlayis.case_study.model.TransportationType;
-import com.serdarfirlayis.case_study.model.RouteDetail;
+import com.serdarfirlayis.case_study.model.*;
 import com.serdarfirlayis.case_study.model.response.RouteResponse;
-import com.serdarfirlayis.case_study.model.Route;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -85,7 +83,7 @@ public class RouteService {
     }
 
     private List<Route> convertToRouteList(List<List<Transportation>> validRoutes) {
-        List<Route> routeList = new ArrayList<>();
+        Map<String, List<TransportationGroup>> routeMap = new HashMap<>();
 
         for (List<Transportation> transportations : validRoutes) {
             List<String> stations = new ArrayList<>();
@@ -110,13 +108,19 @@ public class RouteService {
                     .transportTypes(transportTypes)
                     .build();
 
-            routeList.add(Route.builder()
+            TransportationGroup group = TransportationGroup.builder()
                     .transportations(transportations)
-                    .routeName(routeName)
                     .routeDetail(routeDetail)
-                    .build());
+                    .build();
+
+            routeMap.computeIfAbsent(routeName, k -> new ArrayList<>()).add(group);
         }
 
-        return routeList;
+        return routeMap.entrySet().stream()
+                .map(entry -> Route.builder()
+                        .routeName(entry.getKey())
+                        .transportationGroups(entry.getValue())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
