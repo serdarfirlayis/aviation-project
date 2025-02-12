@@ -42,8 +42,6 @@ public class LocationController {
     @Operation(summary = "Get all locations", description = "Get all locations")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Locations retrieved successfully",
-                    content = @Content(schema = @Schema(implementation = GenericResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content(schema = @Schema(implementation = GenericResponse.class)))
     })
     @GetMapping
@@ -90,8 +88,6 @@ public class LocationController {
     @Operation(summary = "Delete a location", description = "Delete a location by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Location deleted successfully",
-                    content = @Content(schema = @Schema(implementation = GenericResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content(schema = @Schema(implementation = GenericResponse.class)))
     })
     @DeleteMapping("/{id}")
