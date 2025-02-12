@@ -113,7 +113,7 @@ public class RouteService {
                     .routeDetail(routeDetail)
                     .build();
 
-            routeMap.computeIfAbsent(routeName, k -> new ArrayList<>()).add(group);
+            routeMap.computeIfAbsent(routeName, _ -> new ArrayList<>()).add(group);
         }
 
         return routeMap.entrySet().stream()
