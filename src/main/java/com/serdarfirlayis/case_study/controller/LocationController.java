@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,6 @@ public class LocationController {
 
     private final LocationService locationService;
 
-    // TODO: @Valid annotation can be used to validate the request body
     @Operation(summary = "Create a location", description = "Create a location with the given request body")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Location created successfully",
@@ -31,7 +31,7 @@ public class LocationController {
                     content = @Content(schema = @Schema(implementation = GenericResponse.class)))
     })
     @PostMapping
-    public ResponseEntity<GenericResponse<LocationDto>> createLocation(@RequestBody LocationRequest dto) {
+    public ResponseEntity<GenericResponse<LocationDto>> createLocation(@Valid @RequestBody LocationRequest dto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .header("custom-header", "custom-value")
@@ -77,7 +77,7 @@ public class LocationController {
                     content = @Content(schema = @Schema(implementation = GenericResponse.class)))
     })
     @PutMapping("/{id}")
-    public ResponseEntity<GenericResponse<LocationDto>> updateLocation(@PathVariable Long id, @RequestBody LocationRequest dto) {
+    public ResponseEntity<GenericResponse<LocationDto>> updateLocation(@PathVariable Long id, @Valid @RequestBody LocationRequest dto) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("custom-header", "custom-value")
